@@ -6,7 +6,7 @@ import face_recognition
 import re
 
 
-def get_folder_images(folder_name):
+def get_folder_images(folder_name): # function to get all images names in a folder
     entries = os.listdir(folder_name)
     file_names = []
 
@@ -16,7 +16,7 @@ def get_folder_images(folder_name):
     print(file_names)
     return file_names
 
-def load_and_encode_faces(images):
+def load_and_encode_faces(images): # load images and encode faces
     encodings = []
 
     for image_path in images:
@@ -28,7 +28,7 @@ def load_and_encode_faces(images):
 
     return encodings
 
-def get_names(images):
+def get_names(images): # function to get peoples' names from images
     names = []
 
     for i in images:
@@ -71,19 +71,20 @@ while True:
         face_names = []
         for face_encoding in face_encodings:
             # See if the face is a match for the known face(s)
-            matches = face_recognition.compare_faces(encodings, face_encoding)
+            matches = face_recognition.compare_faces(encodings, face_encoding, tolerance = 0.41)
             name = "Unknown"
 
-            # # If a match was found in known_face_encodings, just use the first one.
-            # if True in matches:
-            #     first_match_index = matches.index(True)
-            #     name = known_face_names[first_match_index]
+             # If a match was found in known_face_encodings, just use the first one.
+            if True in matches:
+                first_match_index = matches.index(True)
+                name = names[first_match_index]
 
             # Or instead, use the known face with the smallest distance to the new face
-            face_distances = face_recognition.face_distance(encodings, face_encoding)
-            best_match_index = np.argmin(face_distances)
-            if matches[best_match_index]:
-                name = names[best_match_index]
+
+            # face_distances = face_recognition.face_distance(encodings, face_encoding)
+            # best_match_index = np.argmin(face_distances)
+            # if matches[best_match_index]:
+            #     name = names[best_match_index]
 
             face_names.append(name)
 
